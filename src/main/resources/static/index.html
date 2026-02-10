@@ -57,11 +57,12 @@
     }
 
     function assignMission() {
-        const missionId = document.getElementById("missionId").value;
-        fetch(BASE_URL + "/assign/" + missionId)
-            .then(res => res.json())
-            .then(showResult);
-    }
+    const missionId = document.getElementById("missionId").value;
+    fetch(BASE_URL + "/assign/" + missionId)
+        .then(res => res.json())
+        .then(showResult);
+}
+
 
     function askAgent() {
         const msg = document.getElementById("agentMsg").value;
