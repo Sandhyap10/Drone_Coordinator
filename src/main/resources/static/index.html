@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drone Coordinator Dashboard</title>
+    <style>
+        body { font-family: Arial; margin: 40px; background: #f4f6f8; }
+        h1 { color: #2c3e50; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        input { padding: 8px; margin: 5px; }
+        pre { background: white; padding: 15px; border-radius: 5px; max-height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+<h1>🚁 Drone Operations Coordinator</h1>
+
+<button onclick="getPilots()">Show Pilots</button>
+<button onclick="getDrones()">Show Drones</button>
+<button onclick="getMissions()">Show Missions</button>
+
+<br><br>
+
+<input type="text" id="missionId" placeholder="Mission ID (e.g. PRJ001)">
+<button onclick="assignMission()">Assign Mission</button>
+
+<br><br>
+
+<input type="text" id="agentMsg" placeholder="Ask AI (e.g. show pilots)">
+<button onclick="askAgent()">Ask Agent</button>
+
+<h3>Response:</h3>
+<pre id="output">Waiting for response...</pre>
+
+<script>
+    const BASE_URL = "https://dronecoordinator-production.up.railway.app";
+
+    function showResult(data) {
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    }
+
+    function getPilots() {
+        fetch(BASE_URL + "/pilots")
+            .then(res => res.json())
+            .then(showResult);
+    }
+
+    function getDrones() {
+        fetch(BASE_URL + "/drones")
+            .then(res => res.json())
+            .then(showResult);
+    }
+
+    function getMissions() {
+        fetch(BASE_URL + "/missions")
+            .then(res => res.json())
+            .then(showResult);
+    }
+
+    function assignMission() {
+        const missionId = document.getElementById("missionId").value;
+        fetch(BASE_URL + "/assign/" + missionId)
+            .then(res => res.json())
+            .then(showResult);
+    }
+
+    function askAgent() {
+        const msg = document.getElementById("agentMsg").value;
+        fetch(BASE_URL + "/agent", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: msg })
+        })
+        .then(res => res.json())
+        .then(showResult);
+    }
+</script>
+
+</body>
+</html>
