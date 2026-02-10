@@ -2,12 +2,14 @@ package org.skylark.repository;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.GoogleCredentials;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @Service
@@ -17,15 +19,24 @@ public class GoogleSheetServices {
 
     public GoogleSheetServices() throws Exception {
 
-        InputStream in = getClass().getResourceAsStream("/credentials.json");
+        // 🔥 READ FROM RAILWAY ENV VARIABLE
+        String credentialsJson = System.getenv("Google_Credentials_JSON");
 
-        GoogleCredential credential = GoogleCredential.fromStream(in)
-                .createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
+        if (credentialsJson == null || credentialsJson.isEmpty()) {
+            throw new RuntimeException("Google credentials not found in environment variable!");
+        }
+
+        InputStream credentialsStream = new ByteArrayInputStream(
+                credentialsJson.getBytes(StandardCharsets.UTF_8)
+        );
+
+        GoogleCredentials credentials = GoogleCredentials.fromStream(credentialsStream)
+                .createScoped(Collections.singleton("https://www.googleapis.com/auth/spreadsheets"));
 
         sheetsService = new Sheets.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
                 GsonFactory.getDefaultInstance(),
-                credential
+                new HttpCredentialsAdapter(credentials)
         ).setApplicationName("Drone Coordinator").build();
     }
 
