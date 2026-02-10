@@ -14,7 +14,7 @@ public class AssignmentController {
         this.assignmentService = assignmentService;
     }
 
-    @PostMapping("/{missionId}")
+    @PostMapping("/assign/{missionId}")
     public AssignmentResult assignMission(@PathVariable String missionId) throws Exception {
         return assignmentService.assignMission(missionId);
     }
