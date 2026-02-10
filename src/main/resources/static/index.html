@@ -58,9 +58,12 @@
 
     function assignMission() {
     const missionId = document.getElementById("missionId").value;
-    fetch(BASE_URL + "/assign/" + missionId)
-        .then(res => res.json())
-        .then(showResult);
+
+    fetch(BASE_URL + "/assign/" + missionId, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(showResult);
 }
 
 
