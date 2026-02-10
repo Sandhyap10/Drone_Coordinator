@@ -51,8 +51,8 @@ Reassign a pilot from a lower-priority mission
 Still enforce safety constraints (skills & certifications)
 
 System Architecture
-Backend
-Java Spring Boot
+Backend - 
+Java Spring Boot,
 RESTful APIs
 
 Layered architecture:
@@ -60,9 +60,9 @@ Controller → Service → Repository
 
 Data Source
 Google Sheets API: 
-Pilot roster
-Drone fleet
-Missions
+Pilot roster,
+Drone fleet,
+Missions,
 2-way synchronization for assignments
 
 Frontend
